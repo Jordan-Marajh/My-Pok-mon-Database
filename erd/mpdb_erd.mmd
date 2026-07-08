@@ -11,11 +11,21 @@ erDiagram
         string region_name
     }
 
+    VERSION_GROUP {
+        int version_group_id PK
+        string version_group_name
+        int generation_id FK
+    }
+
     GAME {
         int game_id PK
         string game_name
-        int generation_id FK
-        int region_id FK
+        int version_group_id FK
+    }
+
+    VERSION_GROUP_REGION {
+        int version_group_id PK, FK
+        int region_id PK, FK
     }
 
     POKEMON_SPECIES {
@@ -86,7 +96,7 @@ erDiagram
         int generation_introduced_id FK
     }
 
-    MOVE_GAME_DATA {
+    MOVE_GENERATION_DATA {
         int move_id PK, FK
         int generation_id PK, FK
         int type_id FK
@@ -98,21 +108,32 @@ erDiagram
         int effect_probability
     }
 
+    POKEMON_MOVE_METHOD {
+        int move_method_id PK
+        string move_method_name
+    }
+
     POKEMON_FORM_MOVE {
         int form_id PK, FK
         int move_id PK, FK
-        int game_id PK, FK
-        string learn_method PK
+        int version_group_id PK, FK
+        int move_method_id PK, FK
         int learn_level
         string machine_number
+        int move_order
     }
 
     POKEDEX {
         int pokedex_id PK
         string pokedex_name
         int region_id FK
-        int game_id FK
+        boolean is_main_series
         boolean is_national
+    }
+
+    POKEDEX_VERSION_GROUP {
+        int pokedex_id PK, FK
+        int version_group_id PK, FK
     }
 
     POKEDEX_ENTRY {
@@ -129,8 +150,10 @@ erDiagram
     }
 
 
-    GENERATION ||--o{ GAME : has
-    REGION ||--o{ GAME : contains
+    GENERATION ||--o{ VERSION_GROUP : has
+    VERSION_GROUP ||--o{ GAME : contains
+    VERSION_GROUP ||--o{ VERSION_GROUP_REGION : associated_with
+    REGION ||--o{ VERSION_GROUP_REGION : appears_in
 
     GENERATION ||--o{ POKEMON_SPECIES : introduces
     POKEMON_SPECIES ||--o{ POKEMON_FORM : has
@@ -152,16 +175,18 @@ erDiagram
     GENERATION ||--o{ POKEMON_FORM_ABILITY : valid_in
 
     GENERATION ||--o{ MOVE : introduces
-    MOVE ||--o{ MOVE_GAME_DATA : has
-    GENERATION ||--o{ MOVE_GAME_DATA : valid_in
-    POKEMON_TYPE ||--o{ MOVE_GAME_DATA : gives_type
+    MOVE ||--o{ MOVE_GENERATION_DATA : has
+    GENERATION ||--o{ MOVE_GENERATION_DATA : valid_in
+    POKEMON_TYPE ||--o{ MOVE_GENERATION_DATA : gives_type
 
+    POKEMON_MOVE_METHOD ||--o{ POKEMON_FORM_MOVE : describes
     POKEMON_FORM ||--o{ POKEMON_FORM_MOVE : learns
     MOVE ||--o{ POKEMON_FORM_MOVE : learned_as
-    GAME ||--o{ POKEMON_FORM_MOVE : available_in
+    VERSION_GROUP ||--o{ POKEMON_FORM_MOVE : available_in
 
     REGION ||--o{ POKEDEX : has
-    GAME ||--o{ POKEDEX : uses
+    POKEDEX ||--o{ POKEDEX_VERSION_GROUP : used_in
+    VERSION_GROUP ||--o{ POKEDEX_VERSION_GROUP : uses
     POKEDEX ||--o{ POKEDEX_ENTRY : contains
     POKEMON_SPECIES ||--o{ POKEDEX_ENTRY : listed_as
 
