@@ -1,0 +1,24 @@
+{
+  "name": "mpdb",
+  "version": "1.0.0",
+  "description": "The ERD below shows the relationships between the different tables.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Jordan-Marajh/My-Pok-mon-Database.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/Jordan-Marajh/My-Pok-mon-Database/issues"
+  },
+  "homepage": "https://github.com/Jordan-Marajh/My-Pok-mon-Database#readme",
+  "devDependencies": {
+    "@mermaid-js/mermaid-cli": "^11.16.0"
+  }
+}
